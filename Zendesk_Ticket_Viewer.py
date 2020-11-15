@@ -72,16 +72,19 @@ def get_ticket(ticket_id):
 	ticket = data['ticket']
 
 	header = '{:5}{:50}{:15}{:23}{:23}{:10}'.format('ID', 'Subject', 'Requester', 'Requested on', 'Updated on', 'Group ID')
-	print(header)
-	
+	print("\n" + header)
+ 
 	ticket_id = ticket['id']
 	subject = ticket['subject']
 	requester_id = ticket['requester_id']
 	created_at = ticket['created_at']
 	updated_at = ticket['updated_at']
 	group_id = ticket['group_id']
+	body = ticket['description']
 	element = '{:5}{:50}{:15}{:23}{:23}{:10}'.format(str(ticket_id), subject, str(requester_id), created_at, updated_at, str(group_id))
-	print(element)	
+	body = '{:7}{:120}'.format('Body: ', body )
+	print(element)
+	print("\n" + body + '\n')
 
 
 		
@@ -103,7 +106,7 @@ def get_ticket_list(url):
 	prev = links['prev']
 
 	header = '{:5}{:50}{:15}{:23}{:23}{:10}'.format('ID', 'Subject', 'Requester', 'Requested on', 'Updated on', 'Group ID')
-	print(header)
+	print("\n" + header)
 	for ticket in tickets:
 		ticket_id = ticket['id']
 		subject = ticket['subject']
@@ -113,7 +116,6 @@ def get_ticket_list(url):
 		group_id = ticket['group_id']
 		element = '{:5}{:50}{:15}{:23}{:23}{:10}'.format(str(ticket_id), subject, str(requester_id), created_at, updated_at, str(group_id))
 		print(element)
-	
 	return (meta, links)	
 
 def main():
