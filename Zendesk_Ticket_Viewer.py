@@ -2,6 +2,7 @@ import requests
 import json
 
 zendesk = 'https://berkeley0503.zendesk.com'
+session = None
 	
 def userinput(user_input):
 	if user_input == '1':
@@ -50,16 +51,17 @@ def credential():
 	with open('credential.json') as f:
 		data = json.load(f)
 		credentials = data["id"], data["password"]
+		global session
 		session = requests.Session()
 		session.auth = credentials
-		return session
+		#return session
 
 
 
 def get_ticket(ticket_id):
-	session = credential()
+	#session = credential()
 	url = zendesk + '/api/v2/tickets/' + ticket_id + '.json'
-
+	global session
 	response = session.get(url)
 	if response.status_code != 200:
 		print('Error with status code {}'.format(response.status_code))
@@ -84,7 +86,8 @@ def get_ticket(ticket_id):
 
 		
 def get_ticket_list(url):
-	session = credential()
+	#session = credential()
+	global session
 	response = session.get(url)
 	if response.status_code != 200:
 		print('Error with status code {}'.format(response.status_code))
@@ -114,19 +117,27 @@ def get_ticket_list(url):
 	return (meta, links)	
 
 def main():
+	credential()
+
 	while True:
-		print("\n**** Welcome to the ticket viewer ****\n\n\n\n")
-		print("* Press 1 to view all tickets\n\n")
-		print("* Press 2 to view a ticket\n\n")
-		print("* Press Q to exit\n\n\n\n\n")
-		user_input = input('Your Input: ')
+		user_input = input("**** Welcome to the ticket viewer ****\n\n\n\n" +
+						"* Press 1 to view all tickets\n\n" +
+						"* Press 2 to view a ticket\n\n" + 
+						"* Press Q to exit\n\n\n\n\n" +
+						'Your Input: ')
 		userinput(user_input)
+
+	close()
+
+def close():
+	global session
+	if session:
+		session.close()
 
 if __name__ == '__main__':
     main()
 
 
 		
-
 
 
